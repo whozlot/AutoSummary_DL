@@ -1,0 +1,908 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Summary</title>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    :root {
+      --bg: #16181c;
+      --panel: rgba(31, 35, 41, 0.72);
+      --panel-2: rgba(43, 49, 57, 0.82);
+      --grid: #3b4350;
+      --text: #f3f4f6;
+      --muted: #b9c0c9;
+      --accent: #42b4e6;
+      --good: #1f8f4e;
+      --warn: #b98600;
+      --fault: #b12c2c;
+      --good-bg: rgba(31, 143, 78, 0.18);
+      --warn-bg: rgba(185, 134, 0, 0.18);
+      --fault-bg: rgba(177, 44, 44, 0.18);
+      --hover: rgba(66,180,230,0.10);
+      --glass-border: rgba(255,255,255,0.12);
+      --glass-highlight: rgba(255,255,255,0.08);
+      --modal-bg: rgba(0,0,0,0.45);
+      --drag: rgba(66,180,230,0.16);
+      --radius: 14px;
+      --density-pad-y: 6px;
+      --density-pad-x: 6px;
+      --font-size: 12px;
+    }
+
+    body.ui-light {
+      --bg: #eef2f6;
+      --panel: rgba(255, 255, 255, 0.92);
+      --panel-2: rgba(245, 248, 252, 0.96);
+      --grid: #cdd6e0;
+      --text: #1a2430;
+      --muted: #5e6d7e;
+      --accent: #167ac6;
+      --good: #127a42;
+      --warn: #ad7b00;
+      --fault: #b23333;
+      --good-bg: rgba(18, 122, 66, 0.12);
+      --warn-bg: rgba(173, 123, 0, 0.12);
+      --fault-bg: rgba(178, 51, 51, 0.12);
+      --hover: rgba(22,122,198,0.08);
+      --glass-border: rgba(0,0,0,0.08);
+      --glass-highlight: rgba(255,255,255,0.60);
+      --modal-bg: rgba(0,0,0,0.25);
+      --drag: rgba(22,122,198,0.12);
+    }
+
+    body.surface-standard {
+      --panel: #1f2329;
+      --panel-2: #2b3139;
+      --glass-border: rgba(255,255,255,0.06);
+      --glass-highlight: transparent;
+    }
+
+    body.ui-light.surface-standard {
+      --panel: #ffffff;
+      --panel-2: #f5f8fc;
+      --glass-border: rgba(0,0,0,0.08);
+      --glass-highlight: transparent;
+    }
+
+    body.density-compact {
+      --density-pad-y: 4px;
+      --density-pad-x: 5px;
+      --font-size: 11px;
+      --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 10px;
+      background:
+        radial-gradient(circle at top left, rgba(66,180,230,0.08), transparent 30%),
+        radial-gradient(circle at top right, rgba(255,255,255,0.04), transparent 20%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: var(--font-size);
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    h2 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .gear-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--grid);
+      background: var(--panel-2);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .glass-card {
+      background: var(--panel);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 12px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 8px 24px rgba(0,0,0,0.20);
+    }
+
+    body.surface-standard .glass-card {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+    }
+
+    .glass-card .label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .glass-card .value {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .glass-card.fault .value { color: #ff9d9d; }
+    .glass-card.warn .value { color: #ffd76b; }
+    .glass-card.good .value { color: #8ef0b4; }
+    .glass-card.info .value { color: #8fd8ff; }
+
+    body.ui-light .glass-card.fault .value { color: #c13f3f; }
+    body.ui-light .glass-card.warn .value { color: #a57800; }
+    body.ui-light .glass-card.good .value { color: #177546; }
+    body.ui-light .glass-card.info .value { color: #1f70b2; }
+
+    .toolbar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    button, select, input {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--grid);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    button {
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      border: none;
+      font-weight: 600;
+    }
+
+    select {
+      min-width: 130px;
+    }
+
+    .wrap {
+      overflow: auto;
+      max-height: calc(100vh - 250px);
+      border: 1px solid var(--grid);
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    body.surface-standard .wrap {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    table {
+      width: 100%;
+      min-width: 2200px;
+      border-collapse: collapse;
+      font-size: var(--font-size);
+    }
+
+    th {
+      background: var(--panel-2);
+      color: var(--text);
+      text-align: left;
+      padding: 8px 6px;
+      border-bottom: 1px solid var(--grid);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      user-select: none;
+      vertical-align: middle;
+    }
+
+    th.drag-over {
+      background: var(--drag);
+      outline: 1px dashed rgba(66,180,230,0.75);
+    }
+
+    .th-inner {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .drag-handle {
+      cursor: grab;
+      opacity: 0.7;
+      font-size: 12px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    body.ui-light .drag-handle {
+      background: rgba(0,0,0,0.05);
+    }
+
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .th-label {
+      cursor: pointer;
+    }
+
+    td {
+      padding: var(--density-pad-y) var(--density-pad-x);
+      border-bottom: 1px solid color-mix(in srgb, var(--grid) 70%, transparent);
+      white-space: nowrap;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255,255,255,0.02);
+    }
+
+    body.ui-light tr:nth-child(even) {
+      background: rgba(0,0,0,0.02);
+    }
+
+    tr.data-row:hover {
+      background: var(--hover);
+    }
+
+    tr.group-row td {
+      background: color-mix(in srgb, var(--panel-2) 90%, black 10%);
+      color: var(--text);
+      font-weight: 700;
+      border-top: 1px solid var(--grid);
+      border-bottom: 1px solid var(--grid);
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .device { font-weight: bold; }
+    .desc { color: var(--muted); }
+
+    .status-pill {
+      display: inline-block;
+      min-width: 68px;
+      text-align: center;
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+
+    .status-normal { background: var(--good-bg); color: #2ecc71; }
+    .status-online { background: var(--good-bg); color: #2ecc71; }
+    .status-offline { background: rgba(100,100,100,0.25); color: #ffffff; }
+    .status-unknown { background: transparent; color: var(--muted); }
+    .status-warning { background: var(--warn-bg); color: #f1c40f; }
+    .status-fault { background: var(--fault-bg); color: #e74c3c; }
+
+    body.ui-light .status-normal { color: #177546; }
+    body.ui-light .status-warning { color: #a57800; }
+    body.ui-light .status-fault { color: #b23333; }
+
+    .row-normal td:first-child,
+    .row-normal td:nth-child(2) {
+      border-left: 3px solid var(--good);
+    }
+
+    .row-warning td:first-child,
+    .row-warning td:nth-child(2) {
+      border-left: 3px solid #d2a200;
+    }
+
+    .row-fault td:first-child,
+    .row-fault td:nth-child(2) {
+      border-left: 3px solid #d14b4b;
+    }
+
+    .number-bad { color: #ff9d9d; font-weight: 700; }
+    .number-warn { color: #ffd76b; font-weight: 700; }
+
+    body.ui-light .number-bad { color: #b23333; }
+    body.ui-light .number-warn { color: #a57800; }
+
+    .small { font-size: 11px; color: var(--muted); }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--modal-bg);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal {
+      width: min(980px, 92vw);
+      max-height: 86vh;
+      overflow: auto;
+      background: var(--panel);
+      border: 1px solid var(--grid);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    body.surface-standard .modal {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .modal h3 {
+      margin: 0 0 12px 0;
+    }
+
+    .modal-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tab-btn {
+      background: var(--panel-2);
+      border: 1px solid var(--grid);
+      color: var(--text);
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+      border: none;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checklist {
+      max-height: 420px;
+      overflow: auto;
+      border: 1px solid var(--grid);
+      border-radius: 10px;
+      padding: 10px;
+      background: color-mix(in srgb, var(--panel-2) 80%, black 20%);
+    }
+
+    body.ui-light .checklist {
+      background: color-mix(in srgb, var(--panel-2) 96%, white 4%);
+    }
+
+    .checklist label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      padding: 8px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid transparent;
+      cursor: grab;
+    }
+
+    body.ui-light .order-item {
+      background: rgba(0,0,0,0.03);
+    }
+
+    .order-item.dragging {
+      opacity: 0.5;
+    }
+
+    .order-item.drag-over {
+      border-color: rgba(66,180,230,0.8);
+      background: rgba(66,180,230,0.12);
+    }
+
+    .order-handle {
+      opacity: 0.7;
+      font-size: 12px;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .toggle-group {
+      margin-bottom: 16px;
+    }
+
+    .toggle-label {
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .toggle-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toggle-btn {
+      background: var(--panel-2);
+      border: 1px solid var(--grid);
+      color: var(--text);
+      font-weight: 600;
+      min-width: 100px;
+      cursor: pointer;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .browser-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .browser-row button {
+      padding: 2px 6px;
+      font-size: 11px;
+      min-width: unset;
+    }
+
+    .group-card {
+      border: 1px solid var(--grid);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background: color-mix(in srgb, var(--panel-2) 80%, black 20%);
+    }
+
+    body.ui-light .group-card {
+      background: color-mix(in srgb, var(--panel-2) 96%, white 4%);
+    }
+
+    .group-card-header {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .group-card-header input {
+      flex: 1;
+    }
+
+    .group-remove-btn {
+      background: var(--fault);
+      min-width: unset;
+      padding: 4px 10px;
+    }
+
+    .subtotal-config-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      max-height: 200px;
+      overflow: auto;
+    }
+
+    .subtotal-config-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .subtotal-config-row span {
+      flex: 1;
+    }
+
+    .subtotal-config-row select {
+      min-width: 80px;
+      padding: 4px 6px;
+    }
+
+    .subtotal-row td {
+      background: color-mix(in srgb, var(--panel-2) 85%, var(--accent) 15%);
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--muted);
+      border-top: 1px solid var(--grid);
+    }
+
+    .subtotal-cell {
+      color: var(--accent);
+    }
+
+    .subtotal-label {
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .afdd-section {
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--grid);
+    }
+
+    .afdd-section:last-child {
+      border-bottom: none;
+    }
+
+    .afdd-rule {
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .afdd-warn {
+      background: rgba(185,134,0,0.25);
+      color: #ffd76b;
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+
+    .afdd-critical {
+      background: rgba(177,44,44,0.30);
+      color: #ff9d9d;
+      border-radius: 4px;
+      padding: 1px 4px;
+    }
+
+    body.ui-light .afdd-warn {
+      background: rgba(185,134,0,0.15);
+      color: #7a5500;
+    }
+
+    body.ui-light .afdd-critical {
+      background: rgba(177,44,44,0.15);
+      color: #b23333;
+    }
+
+    .points-device-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .order-item-name {
+      flex: 1;
+    }
+
+    .modal-backdrop.modal-visible {
+      display: flex;
+    }
+
+    .cell-edit-input {
+      width: 100%;
+      padding: 2px 4px;
+      font-size: var(--font-size);
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+    }
+
+    td:has(.cell-edit-input) {
+      padding: 0;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body class="ui-dark surface-standard layout-table density-comfortable">
+  <div class="topbar">
+    <div>
+      <h2 id="pageTitle">Summary</h2>
+      <div class="sub" id="time">Import failed. Check console.</div>
+    </div>
+    <div class="topbar-right">
+      <div class="small">Click a row to open the VAV Flow Diagram.</div>
+      <button id="gearBtn" class="gear-btn" type="button" title="Settings">⚙</button>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="glass-card fault">
+      <div class="label">Faults</div>
+      <div class="value" id="statFaults">0</div>
+    </div>
+    <div class="glass-card warn">
+      <div class="label">Warnings</div>
+      <div class="value" id="statWarnings">0</div>
+    </div>
+    <div class="glass-card good">
+      <div class="label">Occupied</div>
+      <div class="value" id="statOccupied">0</div>
+    </div>
+    <div class="glass-card info">
+      <div class="label">Low Flow</div>
+      <div class="value" id="statLowFlow">0</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button id="refreshBtn" type="button">Refresh</button>
+    <select id="filterSelect">
+      <option value="all">All</option>
+      <option value="fault">Faults</option>
+      <option value="warning">Warnings+</option>
+      <option value="occupied">Occupied</option>
+      <option value="unoccupied">Unoccupied</option>
+    </select>
+  </div>
+
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr id="headerRow"></tr>
+      </thead>
+      <tbody id="body"></tbody>
+    </table>
+  </div>
+
+  <div class="modal-backdrop" id="settingsModal">
+    <div class="modal">
+      <h3>Settings</h3>
+
+      <div class="modal-tabs">
+        <button id="tabSetupBtn" class="tab-btn" type="button">Setup</button>
+        <button id="tabColumnsBtn" class="tab-btn active" type="button">Columns</button>
+        <button id="tabAfddBtn" class="tab-btn" type="button">AFDD</button>
+        <button id="tabAppearanceBtn" class="tab-btn" type="button">Appearance</button>
+        <button id="tabDevicesBtn" class="tab-btn" type="button">Devices</button>
+        <button id="tabPointsBtn" class="tab-btn" type="button">Points</button>
+        <button id="tabGroupsBtn" class="tab-btn" type="button">Groups</button>
+      </div>
+
+      <div id="tabSetup" class="tab-panel">
+        <div class="stack">
+          <div class="small">Configure the root EBO path where your devices live.</div>
+          <div class="field">
+            <label>Root Path</label>
+            <input id="setupRootInput" type="text" placeholder="/Server/Network/CommPort" />
+          </div>
+          <button id="saveRootBtn" type="button">Save Root Path</button>
+          <div class="small">Example: /MyBMS/Interface/Comm B</div>
+        </div>
+      </div>
+
+      <div id="tabColumns" class="tab-panel active">
+        <div class="modal-grid">
+          <div class="stack">
+            <div class="small">Show / hide columns</div>
+            <div class="checklist" id="columnsChecklist"></div>
+          </div>
+          <div class="stack">
+            <div class="small">Visible order (drag to reorder)</div>
+            <div class="checklist" id="columnsOrderList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabAfdd" class="tab-panel">
+        <div class="afdd-section">
+          <div class="toggle-label">Flow Diagnostics</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Actual Flow Point</label>
+              <select id="afddFlowActual"></select>
+            </div>
+            <div class="field">
+              <label>Flow Setpoint Point</label>
+              <select id="afddFlowSp"></select>
+            </div>
+            <div class="field">
+              <label>Flow Threshold (± CFM)</label>
+              <input id="afddFlowThreshold" type="number" step="any">
+            </div>
+          </div>
+          <div class="small afdd-rule">⚠ Warning if Actual Flow &lt; (SP − Threshold) or &gt; (SP + Threshold)</div>
+        </div>
+        <div class="afdd-section">
+          <div class="toggle-label">Temperature Diagnostics</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Actual Temp Point</label>
+              <select id="afddTempActual"></select>
+            </div>
+            <div class="field">
+              <label>Temp Setpoint Point</label>
+              <select id="afddTempSp"></select>
+            </div>
+            <div class="field">
+              <label>Warning Threshold (°)</label>
+              <input id="afddTempWarn" type="number" step="any">
+            </div>
+            <div class="field">
+              <label>Critical Threshold (°)</label>
+              <input id="afddTempCritical" type="number" step="any">
+            </div>
+          </div>
+          <div class="small afdd-rule">⚠ Warning if |Temp − SP| ≥ warning threshold &nbsp;|&nbsp; 🔴 Critical if |Temp − SP| ≥ critical threshold</div>
+        </div>
+      <div class="afdd-section">
+          <div class="toggle-label">Device Status Point</div>
+          <div class="small">Load properties from a device, then click one to select it as the status point.</div>
+          <div class="points-device-row">
+            <select id="statusDeviceSelect"></select>
+            <button id="loadPropertiesBtn" type="button">Load Properties</button>
+          </div>
+          <div class="small">Selected: <span id="statusSelectedPath">None</span></div>
+          <div class="checklist" id="statusPropertiesList"></div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Or type property name manually</label>
+              <input id="statusPointPathInput" type="text" placeholder="e.g. Status" />
+            </div>
+            <div class="field">
+              <label>Online when value equals</label>
+              <input id="statusOnlineValue" type="text" placeholder="e.g. Successful, 1, true" />
+            </div>
+            <div class="field">
+              <label>Offline when value equals</label>
+              <input id="statusOfflineValue" type="text" placeholder="e.g. Offline, 0, false" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tabAppearance" class="tab-panel">
+        <div class="toggle-group">
+          <div class="toggle-label">Theme</div>
+          <div class="toggle-row">
+            <button id="themeDarkBtn" class="toggle-btn" type="button">Dark</button>
+            <button id="themeLightBtn" class="toggle-btn" type="button">Light</button>
+          </div>
+        </div>
+        <div class="toggle-group">
+          <div class="toggle-label">Density</div>
+          <div class="toggle-row">
+            <button id="densityStandardBtn" class="toggle-btn" type="button">Standard</button>
+            <button id="densityCompactBtn" class="toggle-btn" type="button">Compact</button>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="tabDevices" class="tab-panel">
+        <div class="stack">
+          <div class="small" id="devicesStatus">Click Discover Devices to get started.</div>
+          <button id="discoverDevicesBtn" type="button">Discover Devices</button>
+          <div class="checklist" id="devicesChecklist"></div>
+          <button id="saveDevicesBtn" type="button">Save Devices</button>
+        </div>
+      </div>
+
+      <div id="tabPoints" class="tab-panel">
+        <div class="stack">
+          <div class="small">Select a device, then browse to the folder containing the points you want.</div>
+          <div class="points-device-row">
+            <select id="pointsDeviceSelect"></select>
+            <button id="pointsBrowseBtn" type="button">Browse</button>
+          </div>
+          <div class="small" id="pointsBreadcrumb"></div>
+          <div class="small" id="pointsBrowserStatus"></div>
+          <div class="checklist" id="pointsBrowserList"></div>
+          <div class="small">Selected points (from all folders):</div>
+          <div class="checklist" id="selectedPointsList"></div>
+          <button id="saveColumnsBtn" type="button">Save Points</button>
+        </div>
+      </div>
+
+      <div id="tabGroups" class="tab-panel">
+        <div class="stack">
+          <div class="small">Define groups by device name prefix. Add subtotal rows per group.</div>
+          <button id="addGroupBtn" type="button">+ Add Group</button>
+          <div id="groupsContainer"></div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="settingsResetBtn" type="button">Reset Default</button>
+        <button id="settingsSaveBtn" type="button">Save View</button>
+        <button id="settingsCloseBtn" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/server-5-08ad4550-0a84-4fcd-9c15-9235f68c9ac5/publicweb/client_api.js"></script>
+  <script>
+    async function start() {
+      try {
+        const CONFIG_BASE = "/MODOT_TC_ASP1/Web/config";
+        const { App } = await client.importScript('../config/VavSummaryApp');
+        App(document, CONFIG_BASE);
+      } catch (err) {
+        console.error('IMPORT FAILED:', err);
+        document.getElementById('time').textContent = 'Import failed. Check console.';
+      }
+    }
+    start();
+  </script>
+
+</body></html>
