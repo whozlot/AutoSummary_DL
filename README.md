@@ -24,8 +24,17 @@ It discovers devices, builds a live summary table, and saves the configuration s
 5. Save view  
 
 That’s it.
+(MUST BE CONFIGURED IN ASP/Web/Config (String Values)
+AND
+Must configure 2 lines in HTML file. 
+1. Line 893 >> <script src="/server-5-08ad4550-0a84-4fcd-9c15-9235f68c9ac5/publicweb/client_api.js"></script>
+  a. If you are using PCT, you MUST include this from Web Link!
+  b. If on live ASP must be like this>  c. Line 893 >> <script src="/publicweb/client_api.js"></script>
+2. Line 897> const CONFIG_BASE = "/NAME_OF_ASP/Web/config";
 
+thats all folks!
 ---
+
 
 ## Setup
 
