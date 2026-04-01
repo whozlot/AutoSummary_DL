@@ -1,6 +1,6 @@
 # AutoSummary
 
-AutoSummary is a tool for Schneider Electric EcoStruxure (EBO).
+AutoSummary is a tool compatable with Schneider Electric EcoStruxure (EBO). (Tested with Version 7)
 
 It discovers devices, builds a live summary table, and saves the configuration so you don’t have to rebuild it again.
 
