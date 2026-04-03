@@ -2,7 +2,7 @@
 
 **AutoSummary** is compatible with Schneider Electric EcoStruxure™ Building Operation (EBO) (tested with Version 7).
 
-It provides a fast, repeatable way to discover devices, select points, and generate a live summary table—without navigating the EBO tree manually.
+It provides a fast, configurable way to discover devices, select points, and generate a live summary table—without manually building a summary screen.
 
 ---
 
@@ -66,7 +66,7 @@ const CONFIG_BASE = "/NAME_OF_ASP/Web/config";
 
 ### Required String Values in EcoStruxure
 
-Create the required string values under:
+Modify the required string values under:
 
 ```
 /ASP/Web/Config
@@ -77,8 +77,8 @@ Use the following values:
 | Name | Description | Note | Example Value |
 |---|---|---|---|
 | `cfg_graphicpath` | Graphic path | Path from Root Device to Graphic, including graphic name | `/Application/Graphics/VAV Flow Diagram` |
-| `cfg_root` | Root path | Path to the VAV network | `/MODOT_TC_ASP1/Infinet Interface/Comm B` |
-| `cfg_serverbase` | Config path | Path where config files live | `/MODOT_TC_ASP1/Web/config` |
+| `cfg_root` | Root path | Path to the VAV network | `/ASP1/Infinet Interface/Comm B` |
+| `cfg_serverbase` | Config path | Path where config files live | `/ASP1/Web/config` |
 | `cfg_title` | Display title | Title shown in the summary | `MyBMS VAV Summary` |
 
 ---
