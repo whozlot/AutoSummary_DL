@@ -2,7 +2,7 @@
 
 **AutoSummary** is compatible with Schneider Electric EcoStruxure™ Building Operation (EBO) (tested with Version 7).
 
-It provides a fast, configurable summary screen. Discover devices, select points, and generate a live summary table—without building it piece by piece.
+It provides a fast, repeatable way to discover devices, select points, and generate a live summary table—without navigating the EBO tree manually.
 
 ---
 
@@ -31,14 +31,14 @@ Configure once. Use indefinitely.
 
 ## Requirements
 
-AutoSummary requires minimal configuration within EBO.
+AutoSummary requires a small amount of setup inside Schneider Electric EcoStruxure™ Building Operation.
 
-### Server Configuration
-Create string values at:
+### Required Steps
 
-```
-/ASP/Web/Config
-```
+1. Import the provided XML file into an AS-P  
+2. Modify two lines in the HTML file  
+3. Re-import and associate the modified HTML file over the existing HTML5 object in EcoStruxure  
+4. Configure the required string values in EcoStruxure  
 
 ---
 
@@ -48,21 +48,38 @@ Modify the following lines in your HTML file:
 
 #### 1. Client API Script (Approx. Line 893)
 
-**Live ASP:**
+**Live AS-P:**
 ```html
 <script src="/publicweb/client_api.js"></script>
 ```
 
 **PCT:**
-- Must reference via Web Link
-
----
+- This must be referenced from the Web Link path instead
 
 #### 2. Configuration Path (Approx. Line 897)
 
 ```javascript
 const CONFIG_BASE = "/NAME_OF_ASP/Web/config";
 ```
+
+---
+
+### Required String Values in EcoStruxure
+
+Create the required string values under:
+
+```
+/ASP/Web/Config
+```
+
+Use the following values:
+
+| Name | Description | Note | Example Value |
+|---|---|---|---|
+| `cfg_graphicpath` | Graphic path | Path from Root Device to Graphic, including graphic name | `/Application/Graphics/VAV Flow Diagram` |
+| `cfg_root` | Root path | Path to the VAV network | `/MODOT_TC_ASP1/Infinet Interface/Comm B` |
+| `cfg_serverbase` | Config path | Path where config files live | `/MODOT_TC_ASP1/Web/config` |
+| `cfg_title` | Display title | Title shown in the summary | `MyBMS VAV Summary` |
 
 ---
 
@@ -174,3 +191,5 @@ It provides a consistent, structured view of live data for commissioning, troubl
 
 Schneider Electric and EcoStruxure are trademarks of Schneider Electric.  
 AutoSummary is an independent tool and is not affiliated with or endorsed by Schneider Electric.
+
+---
