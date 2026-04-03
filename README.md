@@ -2,7 +2,7 @@
 
 **AutoSummary** is compatible with Schneider Electric EcoStruxure™ Building Operation (EBO) (tested with Version 7).
 
-It provides a fast, repeatable way to discover devices, select points, and generate a live summary table—without navigating the EBO tree manually.
+It provides a fast, configurable summary screen. Discover devices, select points, and generate a live summary table—without building it piece by piece.
 
 ---
 
