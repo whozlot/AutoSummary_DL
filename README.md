@@ -1,17 +1,21 @@
 # AutoSummary
 
-AutoSummary is a tool compatable with Schneider Electric EcoStruxure (EBO). (Tested with Version 7)
+**AutoSummary** is compatible with Schneider Electric EcoStruxure™ Building Operation (EBO) (tested with Version 7).
 
-It discovers devices, builds a live summary table, and saves the configuration so you don’t have to rebuild it again.
+It provides a fast, repeatable way to discover devices, select points, and generate a live summary table—without navigating the EBO tree manually.
 
 ---
 
-## What It Does
+## Overview
 
-- Discovers devices from an EBO root path  
-- Lets you select points from those devices  
-- Builds a clean, real-time table view  
-- Saves configuration (devices, points, columns, layout)  
+AutoSummary allows you to:
+
+- Discover devices from any EBO root path  
+- Select and organize key points  
+- Build a real-time summary table  
+- Save configurations for reuse  
+
+Configure once. Use indefinitely.
 
 ---
 
@@ -20,37 +24,65 @@ It discovers devices, builds a live summary table, and saves the configuration s
 1. Set root path  
 2. Discover devices  
 3. Select points  
-4. Configure table  
-5. Save view  
+4. Configure table layout  
+5. Save configuration  
 
-That’s it.
-(MUST BE CONFIGURED IN ASP/Web/Config (String Values)
-AND
-Must configure 2 lines in HTML file. 
-1. Line 893 >> <script src="/server-5-08ad4550-0a84-4fcd-9c15-9235f68c9ac5/publicweb/client_api.js"></script>
-  a. If you are using PCT, you MUST include this from Web Link!
-  b. If on live ASP must be like this>  c. Line 893 >> <script src="/publicweb/client_api.js"></script>
-2. Line 897> const CONFIG_BASE = "/NAME_OF_ASP/Web/config";
-
-thats all folks!
 ---
 
+## Requirements
+
+AutoSummary requires minimal configuration within EBO.
+
+### Server Configuration
+Create string values at:
+
+```
+/ASP/Web/Config
+```
+
+---
+
+### HTML Configuration
+
+Modify the following lines in your HTML file:
+
+#### 1. Client API Script (Approx. Line 893)
+
+**Live ASP:**
+```html
+<script src="/publicweb/client_api.js"></script>
+```
+
+**PCT:**
+- Must reference via Web Link
+
+---
+
+#### 2. Configuration Path (Approx. Line 897)
+
+```javascript
+const CONFIG_BASE = "/NAME_OF_ASP/Web/config";
+```
+
+---
 
 ## Setup
 
 ### 1. Set Root Path
 
-Define where your devices live in EBO.
+Define the location of your devices in EBO.
 
-Example:
+**Example:**
+```
 /Server/Network/CommPort/VAVs
+```
 
 ---
 
 ### 2. Discover Devices
 
 - Click **Discover Devices**
-- Select which devices to include
+- Select devices to include
 
 ![Device Discovery](docs/images/devices.png)
 
@@ -58,9 +90,9 @@ Example:
 
 ### 3. Select Points
 
-- Choose a device
-- Browse folders
-- Select points (SpaceTemp, Damper, Airflow, etc.)
+- Choose a device  
+- Navigate object folders  
+- Select required points (e.g., SpaceTemp, Damper, Airflow)
 
 ![Point Selection](docs/images/points.png)
 
@@ -68,22 +100,22 @@ Example:
 
 ### 4. Configure Columns
 
-- Show / hide columns  
-- Drag to reorder  
+- Show or hide columns  
+- Reorder via drag-and-drop  
 
 ![Columns](docs/images/columns.png)
 
 ---
 
-### 5. Groups (Optional)
+### 5. Grouping (Optional)
 
-Group devices by naming pattern.
+Group devices using naming patterns.
 
-Example:
-- Floor1 → VAV1*
-- Floor2 → VAV2*
+**Example:**
+- Floor1 → VAV1*  
+- Floor2 → VAV2*  
 
-Adds subtotal rows.
+Adds subtotal rows per group.
 
 ![Groups](docs/images/groups.png)
 
@@ -91,50 +123,54 @@ Adds subtotal rows.
 
 ### 6. AFDD (Optional)
 
-Basic diagnostics:
+Basic fault detection:
 
-- Flow vs setpoint
-- Temperature deviation
-- Device status
+- Flow vs setpoint deviation  
+- Temperature deviation  
+- Device status validation  
 
 ![AFDD](docs/images/afdd.png)
 
 ---
 
-### 7. Save View
+### 7. Save Configuration
 
-Click **Save View**
+Click **Save View** to persist:
 
-This stores:
-- Devices
-- Points
-- Columns
-- Groups
-- AFDD settings
+- Devices  
+- Points  
+- Column layout  
+- Grouping rules  
+- AFDD settings  
 
-Configuration is saved and reused.
+Configuration is stored and reused.
 
 ---
 
-## Files
+## File Structure
 
-- `VavSummary.html` → UI  
-- `VavSummaryApp.js` → Logic  
+- `VavSummary.html` — UI  
+- `VavSummaryApp.js` — Application logic  
 
 ---
 
 ## Purpose
 
-Make EBO data usable without digging through the tree.
+AutoSummary makes EBO data immediately usable without digging through the system tree.
 
-Configure once. Use forever.
+It provides a consistent, structured view of live data for commissioning, troubleshooting, and operations.
 
 ---
 
 ## Notes
 
-- Built for internal BAS workflows  
+- Designed for BAS / controls workflows  
 - No external dependencies  
-- Runs as a standalone HTML app  
+- Runs as a standalone HTML application within EBO  
 
 ---
+
+## Disclaimer
+
+Schneider Electric and EcoStruxure are trademarks of Schneider Electric.  
+AutoSummary is an independent tool and is not affiliated with or endorsed by Schneider Electric.
